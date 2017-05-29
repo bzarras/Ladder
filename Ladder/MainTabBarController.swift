@@ -16,7 +16,6 @@ class MainTabBarController: UITabBarController {
     var contactsViewController = ContactsViewController()
     
     override func viewDidLoad() {
-        UINavigationBar.appearance().barTintColor = UIColor.mainApp
         self.tabBar.tintColor = UIColor.mainApp
         let activityNavController = UINavigationController(rootViewController: self.activityViewController)
         let updatesNavController = UINavigationController(rootViewController: self.updatesViewController)
@@ -24,10 +23,9 @@ class MainTabBarController: UITabBarController {
         let contactsNavController = UINavigationController(rootViewController: self.contactsViewController)
         let navControllers = [activityNavController, updatesNavController, contactsNavController, profileNavController]
         navControllers.forEach {
-            $0.navigationBar.barStyle = .black // makes the nav bar foreground and status bar white
+            $0.navigationBar.barStyle = .default
             $0.navigationBar.isTranslucent = false
-            $0.navigationBar.tintColor = .white
-            $0.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo"))
+            $0.navigationBar.tintColor = .mainApp
         }
         self.setViewControllers(navControllers, animated: true)
         self.selectedViewController = contactsNavController

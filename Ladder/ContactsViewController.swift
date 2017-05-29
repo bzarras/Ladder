@@ -36,9 +36,9 @@ class ContactsViewController: UIViewController {
     override func viewDidLoad() {
         self.title = "Contacts"
         self.tabBarItem = UITabBarItem(title: self.title, image: #imageLiteral(resourceName: "contacts"), tag: 2)
-        self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo"))
+        self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo-green"))
         let rightItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(self.didTapAddContact))
-        rightItem.tintColor = .white
+        rightItem.tintColor = .mainApp
         self.navigationItem.setRightBarButton(rightItem, animated: true)
         
         self.view.backgroundColor = .white

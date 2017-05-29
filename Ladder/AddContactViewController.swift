@@ -78,7 +78,7 @@ class AddContactViewController: UIViewController {
         self.title = "Add Contact"
         self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.didTapDone)), animated: true)
         self.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.didTapCancel)), animated: true)
-        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.tintColor = .mainApp
         self.view.backgroundColor = .white
         
         UIApplication.shared.saveAndReportErrors()

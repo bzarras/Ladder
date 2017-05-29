@@ -92,6 +92,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		534DCC071EDCC82A00A00247 /* root tab bar controllers */ = {
+			isa = PBXGroup;
+			children = (
+				530939121E7DD8A5001754B3 /* ActivityViewController.swift */,
+				53746BF91E35AF3F0099558E /* ContactsViewController.swift */,
+				530939141E7DDC39001754B3 /* UpdatesViewController.swift */,
+				53746BEF1E35447E0099558E /* ProfileViewController.swift */,
+			);
+			name = "root tab bar controllers";
+			sourceTree = "<group>";
+		};
 		53746BC01E353DA00099558E = {
 			isa = PBXGroup;
 			children = (
@@ -177,14 +188,11 @@
 		53B6B86B1E6BA12F00C2C253 /* ux */ = {
 			isa = PBXGroup;
 			children = (
+				534DCC071EDCC82A00A00247 /* root tab bar controllers */,
 				5376C1CB1EBE5E5700E17895 /* utils */,
 				53746BF11E359E8D0099558E /* views */,
 				53746BF71E35AD130099558E /* MainTabBarController.swift */,
-				53746BEF1E35447E0099558E /* ProfileViewController.swift */,
-				53746BF91E35AF3F0099558E /* ContactsViewController.swift */,
 				53B1A66A1E6CE25000DAC899 /* AddContactViewController.swift */,
-				530939141E7DDC39001754B3 /* UpdatesViewController.swift */,
-				530939121E7DD8A5001754B3 /* ActivityViewController.swift */,
 			);
 			name = ux;
 			sourceTree = "<group>";

@@ -24,7 +24,7 @@ extension KeyboardAvoiding {
         else { return }
         let duration = TimeInterval((notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.floatValue ?? 0)
         if keyboardFrame.origin.y < UIScreen.main.bounds.height {
-            self.bottomConstraint?.constant -= keyboardFrame.height - vc.bottomLayoutGuide.length
+            self.bottomConstraint?.constant = -(keyboardFrame.height - vc.bottomLayoutGuide.length)
         } else {
             self.bottomConstraint?.constant = 0
         }

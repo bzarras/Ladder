@@ -13,7 +13,7 @@ class UpdatesViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         self.title = "Updates"
-        self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo"))
+        self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo-green"))
         self.tabBarItem = UITabBarItem(title: self.title, image: #imageLiteral(resourceName: "news"), tag: 0)
     }
     

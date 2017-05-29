@@ -10,7 +10,7 @@ import UIKit
 
 extension UIFont {
     
-    static let bigAppFont: UIFont = .systemFont(ofSize: 28)
+    static let bigAppFont: UIFont = .systemFont(ofSize: 24)
     
     static let mediumAppFont: UIFont = .systemFont(ofSize: 18)
     

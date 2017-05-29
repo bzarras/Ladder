@@ -17,6 +17,9 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
         static let all = [profile, notes]
     }
     
+    fileprivate let notePlaceholder = "Add note"
+    fileprivate let noteInputHeight: CGFloat = 31
+    
     var user: User?
     
     lazy var profileView: ProfileView = {
@@ -38,24 +41,29 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
         return tableView
     }()
     
-    lazy var noteField: PaddedTextField = {
-        let textField = PaddedTextField()
-        textField.placeholder = "Add note"
-        textField.layer.cornerRadius = 31 / 2 // 31 is the frame height of the text field
-        textField.backgroundColor = .white
-        textField.layer.borderWidth = 0.5
-        textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.returnKeyType = .done
-        textField.delegate = self
-        return textField
+    // I can't get the event when the return key is tapped, so I will need to make a custom subclass that has a "done" button in the corner of the text view, like in messages
+    // I should also subclass the textview delegate class to have a method that gets called when the done button is pressed, then override the text view's delegate with that custom one
+    lazy var noteInputView: UITextView = {
+        let textView = UITextView()
+        textView.text = self.notePlaceholder
+        textView.font = UIFont.smallAppFont
+        textView.textColor = .lightGray
+        textView.layer.cornerRadius = self.noteInputHeight / 2
+        textView.backgroundColor = .white
+        textView.layer.borderWidth = 0.5
+        textView.layer.borderColor = UIColor.lightGray.cgColor
+        textView.textContainerInset = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        textView.returnKeyType = .default
+        textView.delegate = self
+        return textView
     }()
     
-    lazy var noteFieldContainer: UIView = {
+    lazy var noteViewContainer: UIView = {
         let noteFieldContainer = UIView()
         noteFieldContainer.backgroundColor = .greyBackground
-        noteFieldContainer.addSubviews([self.noteField])
-        noteFieldContainer.addConstraints(withVisualFormat: "|-[note]-|", views: ["note": self.noteField])
-        noteFieldContainer.addConstraints(withVisualFormat: "V:|-[note]-|", views: ["note": self.noteField])
+        noteFieldContainer.addSubviews([self.noteInputView])
+        noteFieldContainer.addConstraints(withVisualFormat: "|-[note]-|", views: ["note": self.noteInputView])
+        noteFieldContainer.addConstraints(withVisualFormat: "V:|-[note(31)]-|", views: ["note": self.noteInputView])
         return noteFieldContainer
     }()
     
@@ -78,27 +86,24 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
     }
     
     override func viewDidLoad() {
-        self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo"))
+        self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo-green"))
         let rightItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.didTapEdit))
-        rightItem.tintColor = .white
+        rightItem.tintColor = .mainApp
         self.navigationItem.setRightBarButton(rightItem, animated: true)
         
         // Keyboard Avoiding
-        self.bottomConstraint = NSLayoutConstraint(item: self.noteFieldContainer, attribute: .bottom, relatedBy: .equal, toItem: self.bottomLayoutGuide, attribute: .top, multiplier: 1, constant: 0)
+        self.bottomConstraint = NSLayoutConstraint(item: self.noteViewContainer, attribute: .bottom, relatedBy: .equal, toItem: self.bottomLayoutGuide, attribute: .top, multiplier: 1, constant: 0)
         self.keyboardAvoidingVC = self
         
         self.view.backgroundColor = .white
-        self.view.addSubviews([self.tableView, self.noteFieldContainer])
-        self.view.addConstraints(withVisualFormat: "V:|[table][input][bottom]", views: ["table": self.tableView, "input": self.noteFieldContainer, "bottom": self.bottomLayoutGuide])
+        self.view.addSubviews([self.tableView, self.noteViewContainer])
+        self.view.addConstraints(withVisualFormat: "V:|[table][input]", views: ["table": self.tableView, "input": self.noteViewContainer])
         
         if let noteViewContainerBottomConstraint = self.bottomConstraint {
             self.view.addConstraint(noteViewContainerBottomConstraint)
         }
         self.view.addConstraints(withVisualFormat: "|[table]|", views: ["table": self.tableView])
-        self.view.addConstraints(withVisualFormat: "|[noteField]|", views: ["noteField": self.noteFieldContainer])
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name: .UIKeyboardWillHide, object: nil)
+        self.view.addConstraints(withVisualFormat: "|[noteField]|", views: ["noteField": self.noteViewContainer])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -120,14 +125,6 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
     func didTapEdit() {
         let vc = AddContactViewController(user: self.user)
         self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func keyboardWillShow(notification: NSNotification) {
-        print("keyboard will show")
-    }
-    
-    func keyboardWillHide(notification: NSNotification) {
-        print("keyboard will hide")
     }
 }
 
@@ -168,9 +165,28 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension ProfileViewController: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+extension ProfileViewController: UITextViewDelegate {
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         return true
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.showPlaceholderIfNeeded(for: textView, editingBegan: true)
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        self.showPlaceholderIfNeeded(for: textView, editingBegan: false)
+    }
+    
+    private func showPlaceholderIfNeeded(for textView: UITextView, editingBegan: Bool) {
+        if editingBegan {
+            guard textView.textColor == .lightGray else { return }
+            textView.text = nil
+            textView.textColor = .black
+        } else {
+            guard textView.text == nil else { return }
+            textView.text = self.notePlaceholder
+            textView.textColor = .lightGray
+        }
     }
 }
