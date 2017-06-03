@@ -10,19 +10,25 @@ import UIKit
 import CoreData
 
 class UsersService {
-    
     static let shared = UsersService()
     
     private var users: [User] = []
     
-    private init() {}
+    private let fetchRequest: NSFetchRequest<NSFetchRequestResult>
+    let fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult>
     
+    private init() {
+        self.fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+        self.fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastname", ascending: true), NSSortDescriptor(key: "firstname", ascending: true)]
+        self.fetchedResultsController = NSFetchedResultsController(fetchRequest: self.fetchRequest, managedObjectContext: UIApplication.shared.managedObjectContext, sectionNameKeyPath: "firstCharOfLastName", cacheName: nil)
+    }
+    
+    // TODO: This may not be needed anymore because we handle everything through the fetchedResultsController
     func fetchAllUsers() -> [User] {
         if self.users.isEmpty {
-            let moc = UIApplication.shared.managedObjectContext
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
             do {
-                let users = try moc.fetch(fetchRequest) as! [User]
+                try self.fetchedResultsController.performFetch()
+                guard let users = self.fetchedResultsController.fetchedObjects as? [User] else { preconditionFailure() }
                 self.users = users
             } catch {
                 fatalError("\(error)")
@@ -49,5 +55,12 @@ class UsersService {
     func rollback() {
         UIApplication.shared.managedObjectContext.rollback()
     }
-    
+}
+
+fileprivate extension User {
+    dynamic var firstCharOfLastName: String? {
+        let firstChar = self.lastname?.characters.first
+        guard let c = firstChar else { return nil }
+        return String(c)
+    }
 }
