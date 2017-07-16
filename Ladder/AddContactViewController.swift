@@ -133,25 +133,32 @@ class AddContactViewController: UIViewController {
     }
 }
 
+// MARK: - UITextFieldDelegate
+
 extension AddContactViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.characters.isEmpty else { return }
+        let textToSave: String?
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.characters.isEmpty {
+            textToSave = text
+        } else {
+            textToSave = nil
+        }
         switch textField {
         case self.firstnameField:
-            self.user?.firstname = text
+            self.user?.firstname = textToSave
         case self.lastnameField:
-            self.user?.lastname = text
+            self.user?.lastname = textToSave
         case self.emailField:
-            self.user?.email1 = text
+            self.user?.email1 = textToSave
         case self.companyField:
-            self.user?.company = text
+            self.user?.company = textToSave
         case self.titleField:
-            self.user?.title = text
+            self.user?.title = textToSave
         case self.schoolField:
-            self.user?.school = text
+            self.user?.school = textToSave
         case self.phoneField:
-            self.user?.phone = text
+            self.user?.phone = textToSave
         default:()
         }
     }

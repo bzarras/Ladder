@@ -10,10 +10,11 @@
 		530939131E7DD8A5001754B3 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530939121E7DD8A5001754B3 /* ActivityViewController.swift */; };
 		530939151E7DDC39001754B3 /* UpdatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530939141E7DDC39001754B3 /* UpdatesViewController.swift */; };
 		530939171E7ECBD1001754B3 /* UIFont+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530939161E7ECBD1001754B3 /* UIFont+Utils.swift */; };
+		5346407D1F1BEC5D00E959F0 /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5346407C1F1BEC5D00E959F0 /* TableHeaderView.swift */; };
+		5356C3031F0AF7E300B82644 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5356C3021F0AF7E300B82644 /* AddNoteViewController.swift */; };
 		53746BCD1E353DA10099558E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53746BCC1E353DA10099558E /* AppDelegate.swift */; };
 		53746BD21E353DA10099558E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53746BD01E353DA10099558E /* Main.storyboard */; };
 		53746BD71E353DA10099558E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53746BD61E353DA10099558E /* Assets.xcassets */; };
-		53746BDA1E353DA10099558E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 53746BD81E353DA10099558E /* LaunchScreen.storyboard */; };
 		53746BE51E353DA10099558E /* LadderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53746BE41E353DA10099558E /* LadderTests.swift */; };
 		53746BF01E35447E0099558E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53746BEF1E35447E0099558E /* ProfileViewController.swift */; };
 		53746BF31E359F020099558E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53746BF21E359F020099558E /* ProfileView.swift */; };
@@ -29,6 +30,12 @@
 		53B6B8751E6BA31A00C2C253 /* ProfileView+Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B6B8741E6BA31A00C2C253 /* ProfileView+Configurations.swift */; };
 		53B6B8811E6BDE8F00C2C253 /* Ladder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 53B6B87B1E6BCB2A00C2C253 /* Ladder.xcdatamodeld */; };
 		53CDA36B1E8727E500349F9F /* PaddedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CDA36A1E8727E500349F9F /* PaddedTextField.swift */; };
+		53F8D6791EE34D6300B18DC7 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F8D6781EE34D6300B18DC7 /* Resource.swift */; };
+		53F8D67B1EE4633000B18DC7 /* ActivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F8D67A1EE4633000B18DC7 /* ActivityService.swift */; };
+		53F8D67D1EE4722E00B18DC7 /* ActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F8D67C1EE4722E00B18DC7 /* ActivityTableViewCell.swift */; };
+		53F8D67F1EE47C6000B18DC7 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F8D67E1EE47C6000B18DC7 /* CardTableViewCell.swift */; };
+		576380A40FEA49AF7A8D9136 /* Pods_LadderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 144D48AC535B5ED8A414050B /* Pods_LadderTests.framework */; };
+		98FD7037D177167B5E0F6841 /* Pods_Ladder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6EF6ED937BBA1A79B8E8FA3 /* Pods_Ladder.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,14 +49,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		144D48AC535B5ED8A414050B /* Pods_LadderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LadderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BCB8B498EE374063272AC30 /* Pods-Ladder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ladder.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ladder/Pods-Ladder.debug.xcconfig"; sourceTree = "<group>"; };
 		530939121E7DD8A5001754B3 /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		530939141E7DDC39001754B3 /* UpdatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdatesViewController.swift; sourceTree = "<group>"; };
 		530939161E7ECBD1001754B3 /* UIFont+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIFont+Utils.swift"; path = "extensions/UIFont+Utils.swift"; sourceTree = "<group>"; };
+		5346407B1F1BDA2D00E959F0 /* Ladder0.0.7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Ladder0.0.7.xcdatamodel; sourceTree = "<group>"; };
+		5346407C1F1BEC5D00E959F0 /* TableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableHeaderView.swift; path = views/TableHeaderView.swift; sourceTree = "<group>"; };
+		5356C3021F0AF7E300B82644 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
+		5356C3041F0B084C00B82644 /* Ladder0.0.6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Ladder0.0.6.xcdatamodel; sourceTree = "<group>"; };
 		53746BC91E353DA10099558E /* Ladder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ladder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		53746BCC1E353DA10099558E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		53746BD11E353DA10099558E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		53746BD61E353DA10099558E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		53746BD91E353DA10099558E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		53746BDB1E353DA10099558E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		53746BE01E353DA10099558E /* LadderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LadderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		53746BE41E353DA10099558E /* LadderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LadderTests.swift; sourceTree = "<group>"; };
@@ -72,6 +84,15 @@
 		53B6B87E1E6BCB2A00C2C253 /* Ladder0.0.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Ladder0.0.2.xcdatamodel; sourceTree = "<group>"; };
 		53B6B8801E6BDDD200C2C253 /* Ladder0.0.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Ladder0.0.3.xcdatamodel; sourceTree = "<group>"; };
 		53CDA36A1E8727E500349F9F /* PaddedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PaddedTextField.swift; path = views/PaddedTextField.swift; sourceTree = "<group>"; };
+		53F8D6771EE3447100B18DC7 /* Ladder0.0.5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Ladder0.0.5.xcdatamodel; sourceTree = "<group>"; };
+		53F8D6781EE34D6300B18DC7 /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Resource.swift; path = Ladder/model/Resource.swift; sourceTree = "<group>"; };
+		53F8D67A1EE4633000B18DC7 /* ActivityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityService.swift; path = Ladder/model/ActivityService.swift; sourceTree = "<group>"; };
+		53F8D67C1EE4722E00B18DC7 /* ActivityTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivityTableViewCell.swift; path = views/ActivityTableViewCell.swift; sourceTree = "<group>"; };
+		53F8D67E1EE47C6000B18DC7 /* CardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
+		C1CF8C641784A6C7B1A8C298 /* Pods-Ladder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ladder.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ladder/Pods-Ladder.release.xcconfig"; sourceTree = "<group>"; };
+		E38F5848A5EB0AE97B9418AB /* Pods-LadderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LadderTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LadderTests/Pods-LadderTests.release.xcconfig"; sourceTree = "<group>"; };
+		E6EF6ED937BBA1A79B8E8FA3 /* Pods_Ladder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ladder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EDC0B49A92C6911697AAB0D9 /* Pods-LadderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LadderTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LadderTests/Pods-LadderTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98FD7037D177167B5E0F6841 /* Pods_Ladder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				576380A40FEA49AF7A8D9136 /* Pods_LadderTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +132,8 @@
 				53746BCB1E353DA10099558E /* Ladder */,
 				53746BE31E353DA10099558E /* LadderTests */,
 				53746BCA1E353DA10099558E /* Products */,
+				7C928FCCD2B733F7873FE31E /* Pods */,
+				FD0D07EB7104E839A87858D5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,7 +155,6 @@
 				53746BCC1E353DA10099558E /* AppDelegate.swift */,
 				53746BD01E353DA10099558E /* Main.storyboard */,
 				53746BD61E353DA10099558E /* Assets.xcassets */,
-				53746BD81E353DA10099558E /* LaunchScreen.storyboard */,
 				53746BDB1E353DA10099558E /* Info.plist */,
 			);
 			path = Ladder;
@@ -152,6 +176,9 @@
 				53B6B8741E6BA31A00C2C253 /* ProfileView+Configurations.swift */,
 				53B1A6641E6C711800DAC899 /* ContactTableViewCell.swift */,
 				53CDA36A1E8727E500349F9F /* PaddedTextField.swift */,
+				53F8D67C1EE4722E00B18DC7 /* ActivityTableViewCell.swift */,
+				53F8D67E1EE47C6000B18DC7 /* CardTableViewCell.swift */,
+				5346407C1F1BEC5D00E959F0 /* TableHeaderView.swift */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -180,6 +207,8 @@
 			children = (
 				53B6B87B1E6BCB2A00C2C253 /* Ladder.xcdatamodeld */,
 				53B1A6681E6C740100DAC899 /* UsersService.swift */,
+				53F8D6781EE34D6300B18DC7 /* Resource.swift */,
+				53F8D67A1EE4633000B18DC7 /* ActivityService.swift */,
 			);
 			name = model;
 			path = ..;
@@ -193,8 +222,29 @@
 				53746BF11E359E8D0099558E /* views */,
 				53746BF71E35AD130099558E /* MainTabBarController.swift */,
 				53B1A66A1E6CE25000DAC899 /* AddContactViewController.swift */,
+				5356C3021F0AF7E300B82644 /* AddNoteViewController.swift */,
 			);
 			name = ux;
+			sourceTree = "<group>";
+		};
+		7C928FCCD2B733F7873FE31E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2BCB8B498EE374063272AC30 /* Pods-Ladder.debug.xcconfig */,
+				C1CF8C641784A6C7B1A8C298 /* Pods-Ladder.release.xcconfig */,
+				EDC0B49A92C6911697AAB0D9 /* Pods-LadderTests.debug.xcconfig */,
+				E38F5848A5EB0AE97B9418AB /* Pods-LadderTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		FD0D07EB7104E839A87858D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E6EF6ED937BBA1A79B8E8FA3 /* Pods_Ladder.framework */,
+				144D48AC535B5ED8A414050B /* Pods_LadderTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,9 +254,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53746BE91E353DA10099558E /* Build configuration list for PBXNativeTarget "Ladder" */;
 			buildPhases = (
+				59E0CFA4DB0112E002A96F4E /* [CP] Check Pods Manifest.lock */,
 				53746BC51E353DA00099558E /* Sources */,
 				53746BC61E353DA00099558E /* Frameworks */,
 				53746BC71E353DA00099558E /* Resources */,
+				2362F3B59E5691CE5E291E77 /* [CP] Embed Pods Frameworks */,
+				0A74E325572EC2FD6E69C139 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -221,9 +274,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53746BEC1E353DA10099558E /* Build configuration list for PBXNativeTarget "LadderTests" */;
 			buildPhases = (
+				3D984EBC8083E4AA08A6FC8A /* [CP] Check Pods Manifest.lock */,
 				53746BDC1E353DA10099558E /* Sources */,
 				53746BDD1E353DA10099558E /* Frameworks */,
 				53746BDE1E353DA10099558E /* Resources */,
+				843B2A3F2812DC55E7EEF98A /* [CP] Embed Pods Frameworks */,
+				5A5C2D1A35488285754B8C44 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -282,7 +338,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53746BDA1E353DA10099558E /* LaunchScreen.storyboard in Resources */,
 				53746BD71E353DA10099558E /* Assets.xcassets in Resources */,
 				53746BD21E353DA10099558E /* Main.storyboard in Resources */,
 			);
@@ -297,12 +352,106 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0A74E325572EC2FD6E69C139 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Ladder/Pods-Ladder-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2362F3B59E5691CE5E291E77 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Ladder/Pods-Ladder-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3D984EBC8083E4AA08A6FC8A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		59E0CFA4DB0112E002A96F4E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		5A5C2D1A35488285754B8C44 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LadderTests/Pods-LadderTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		843B2A3F2812DC55E7EEF98A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LadderTests/Pods-LadderTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		53746BC51E353DA00099558E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				53746BF31E359F020099558E /* ProfileView.swift in Sources */,
+				53F8D67F1EE47C6000B18DC7 /* CardTableViewCell.swift in Sources */,
 				5376C1CD1EBE5EA300E17895 /* KeyboardAvoiding.swift in Sources */,
 				53B6B8751E6BA31A00C2C253 /* ProfileView+Configurations.swift in Sources */,
 				53CDA36B1E8727E500349F9F /* PaddedTextField.swift in Sources */,
@@ -311,9 +460,14 @@
 				53B1A6691E6C740100DAC899 /* UsersService.swift in Sources */,
 				53746BFA1E35AF3F0099558E /* ContactsViewController.swift in Sources */,
 				53746BF61E35A48B0099558E /* UIView+Utils.swift in Sources */,
+				5346407D1F1BEC5D00E959F0 /* TableHeaderView.swift in Sources */,
 				53B1A6671E6C72B500DAC899 /* UIApplication+Utils.swift in Sources */,
+				53F8D67B1EE4633000B18DC7 /* ActivityService.swift in Sources */,
+				53F8D67D1EE4722E00B18DC7 /* ActivityTableViewCell.swift in Sources */,
 				53B1A6651E6C711800DAC899 /* ContactTableViewCell.swift in Sources */,
 				53B1A66B1E6CE25000DAC899 /* AddContactViewController.swift in Sources */,
+				53F8D6791EE34D6300B18DC7 /* Resource.swift in Sources */,
+				5356C3031F0AF7E300B82644 /* AddNoteViewController.swift in Sources */,
 				53746BCD1E353DA10099558E /* AppDelegate.swift in Sources */,
 				530939151E7DDC39001754B3 /* UpdatesViewController.swift in Sources */,
 				530939131E7DD8A5001754B3 /* ActivityViewController.swift in Sources */,
@@ -348,14 +502,6 @@
 				53746BD11E353DA10099558E /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		53746BD81E353DA10099558E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				53746BD91E353DA10099558E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -456,8 +602,10 @@
 		};
 		53746BEA1E353DA10099558E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BCB8B498EE374063272AC30 /* Pods-Ladder.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = 226P7Z9FB4;
 				INFOPLIST_FILE = Ladder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -469,8 +617,10 @@
 		};
 		53746BEB1E353DA10099558E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C1CF8C641784A6C7B1A8C298 /* Pods-Ladder.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = 226P7Z9FB4;
 				INFOPLIST_FILE = Ladder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -482,6 +632,7 @@
 		};
 		53746BED1E353DA10099558E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EDC0B49A92C6911697AAB0D9 /* Pods-LadderTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -497,6 +648,7 @@
 		};
 		53746BEE1E353DA10099558E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E38F5848A5EB0AE97B9418AB /* Pods-LadderTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -546,13 +698,16 @@
 		53B6B87B1E6BCB2A00C2C253 /* Ladder.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				5346407B1F1BDA2D00E959F0 /* Ladder0.0.7.xcdatamodel */,
+				5356C3041F0B084C00B82644 /* Ladder0.0.6.xcdatamodel */,
+				53F8D6771EE3447100B18DC7 /* Ladder0.0.5.xcdatamodel */,
 				53B1A66E1E6D12B300DAC899 /* Ladder0.0.4.xcdatamodel */,
 				53B6B8801E6BDDD200C2C253 /* Ladder0.0.3.xcdatamodel */,
 				53B6B87C1E6BCB2A00C2C253 /* Ladder.xcdatamodel */,
 				53B6B87D1E6BCB2A00C2C253 /* Ladder0.0.1.xcdatamodel */,
 				53B6B87E1E6BCB2A00C2C253 /* Ladder0.0.2.xcdatamodel */,
 			);
-			currentVersion = 53B1A66E1E6D12B300DAC899 /* Ladder0.0.4.xcdatamodel */;
+			currentVersion = 5346407B1F1BDA2D00E959F0 /* Ladder0.0.7.xcdatamodel */;
 			name = Ladder.xcdatamodeld;
 			path = Ladder/Ladder.xcdatamodeld;
 			sourceTree = "<group>";

@@ -79,7 +79,7 @@ class ProfileView: UIView {
         self.addConstraints(withVisualFormat: "[image]-\(UIView.commonMargin)-[name]", views: viewDict)
         self.addConstraints(withVisualFormat: "[image]-\(UIView.commonMargin)-[company]", views: viewDict)
         self.addConstraints(withVisualFormat: "[image]-\(UIView.commonMargin)-[title]", views: viewDict)
-        self.addConstraints(withVisualFormat: "V:[name]-10-[title]-5-[company]", views: viewDict)
+        self.addConstraints(withVisualFormat: "V:[name]-10-[company]-5-[title]", views: viewDict)
         self.addConstraints(withVisualFormat: "|-\(UIView.commonMargin)-[detailLabels(90)]-\(UIView.commonMargin)-[details]|", views: viewDict)
         self.addConstraint(NSLayoutConstraint(item: self.detailLabelsStack, attribute: .top, relatedBy: .equal, toItem: self.detailsStack, attribute: .top))
         self.addConstraint(NSLayoutConstraint(item: self.detailLabelsStack, attribute: .height, relatedBy: .equal, toItem: self.detailsStack, attribute: .height))

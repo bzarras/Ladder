@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreData
+import DateToolsSwift
 
-class ProfileViewController: UIViewController, KeyboardAvoiding {
+class ProfileViewController: UIViewController {
     
     fileprivate enum Section: Int {
         case profile
@@ -21,13 +22,12 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
     fileprivate let noteInputHeight: CGFloat = 31
     
     var user: User?
+    var userIsSelf: Bool {
+        return self.user?.id == "self"
+    }
     
     lazy var profileView: ProfileView = {
-        let profileView = ProfileView(frame: .zero)
-        profileView.image.image = #imageLiteral(resourceName: "example-profile-pic")
-        profileView.nameLabel.text = "Ben Zarras"
-        profileView.titleLabel.text = "Software Engineer"
-        return profileView
+        return ProfileView(frame: .zero)
     }()
     
     lazy var tableView: UITableView = {
@@ -41,34 +41,13 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
         return tableView
     }()
     
-    // I can't get the event when the return key is tapped, so I will need to make a custom subclass that has a "done" button in the corner of the text view, like in messages
-    // I should also subclass the textview delegate class to have a method that gets called when the done button is pressed, then override the text view's delegate with that custom one
-    lazy var noteInputView: UITextView = {
-        let textView = UITextView()
-        textView.text = self.notePlaceholder
-        textView.font = UIFont.smallAppFont
-        textView.textColor = .lightGray
-        textView.layer.cornerRadius = self.noteInputHeight / 2
-        textView.backgroundColor = .white
-        textView.layer.borderWidth = 0.5
-        textView.layer.borderColor = UIColor.lightGray.cgColor
-        textView.textContainerInset = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        textView.returnKeyType = .default
-        textView.delegate = self
-        return textView
+    lazy var addNoteButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Add Note", for: .normal)
+        button.setTitleColor(UIColor.mainApp, for: .normal)
+        button.addTarget(self, action: #selector(didTapAddNote), for: .touchUpInside)
+        return button
     }()
-    
-    lazy var noteViewContainer: UIView = {
-        let noteFieldContainer = UIView()
-        noteFieldContainer.backgroundColor = .greyBackground
-        noteFieldContainer.addSubviews([self.noteInputView])
-        noteFieldContainer.addConstraints(withVisualFormat: "|-[note]-|", views: ["note": self.noteInputView])
-        noteFieldContainer.addConstraints(withVisualFormat: "V:|-[note(31)]-|", views: ["note": self.noteInputView])
-        return noteFieldContainer
-    }()
-    
-    var bottomConstraint: NSLayoutConstraint?
-    weak var keyboardAvoidingVC: UIViewController?
     
     required init(forUser user: User?) {
         self.user = user
@@ -83,41 +62,34 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
     func commonInit() {
         self.title = "Profile"
         self.tabBarItem = UITabBarItem(title: "Profile", image: #imageLiteral(resourceName: "profile"), tag: 3)
+        if self.user == nil {
+            self.user = UsersService.shared.fetchUserIdentity()
+        }
     }
     
     override func viewDidLoad() {
-        self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo-green"))
+        if self == self.navigationController?.viewControllers.first { // show app logo if we got here directly from the home screen
+            self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo-green"))
+        } else {
+            self.navigationItem.title = "Contact"
+        }
         let rightItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.didTapEdit))
         rightItem.tintColor = .mainApp
         self.navigationItem.setRightBarButton(rightItem, animated: true)
         
-        // Keyboard Avoiding
-        self.bottomConstraint = NSLayoutConstraint(item: self.noteViewContainer, attribute: .bottom, relatedBy: .equal, toItem: self.bottomLayoutGuide, attribute: .top, multiplier: 1, constant: 0)
-        self.keyboardAvoidingVC = self
-        
-        self.view.backgroundColor = .white
-        self.view.addSubviews([self.tableView, self.noteViewContainer])
-        self.view.addConstraints(withVisualFormat: "V:|[table][input]", views: ["table": self.tableView, "input": self.noteViewContainer])
-        
-        if let noteViewContainerBottomConstraint = self.bottomConstraint {
-            self.view.addConstraint(noteViewContainerBottomConstraint)
-        }
+        self.view.backgroundColor = .greyBackground
+        self.view.addSubviews([self.tableView, self.addNoteButton])
+        self.view.addConstraints(withVisualFormat: "V:|[table][button][bottom]", views: ["table": self.tableView, "button": self.addNoteButton, "bottom": self.bottomLayoutGuide])
         self.view.addConstraints(withVisualFormat: "|[table]|", views: ["table": self.tableView])
-        self.view.addConstraints(withVisualFormat: "|[noteField]|", views: ["noteField": self.noteViewContainer])
+        self.view.addConstraint(NSLayoutConstraint(item: self.addNoteButton, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX))
+        self.addNoteButton.isHidden = self.userIsSelf
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if let user = self.user {
-            ProfileView.configure(profileView: self.profileView, withUser: user)
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        self.startKeyboardAvoiding()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        self.stopKeyboardAvoiding()
+        super.viewWillAppear(animated)
+        guard let user = self.user else { return }
+        ProfileView.configure(profileView: self.profileView, withUser: user)
+        self.tableView.reloadData()
     }
     
     // MARK: - Actions
@@ -126,7 +98,15 @@ class ProfileViewController: UIViewController, KeyboardAvoiding {
         let vc = AddContactViewController(user: self.user)
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    func didTapAddNote() {
+        let vc = AddNoteViewController()
+        vc.delegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
+
+// MARK: - UITableViewDelegate and DataSource
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -139,8 +119,26 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         switch section {
         case .profile:
             return 1
-        default:
-            return 0 // fix this later
+        case .notes:
+            return user?.notes?.count ?? 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let section = Section(rawValue: section) else { preconditionFailure() }
+        switch section {
+        case .profile: return nil
+        case .notes:
+            return self.userIsSelf ? nil : TableHeaderView(text: "Notes")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let section = Section(rawValue: section) else { preconditionFailure() }
+        switch section {
+        case .profile: return 0
+        case .notes:
+            return self.userIsSelf ? 0 : TableHeaderView.font.lineHeight + CardTableViewCell.margin
         }
     }
     
@@ -154,39 +152,43 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             profileCell.contentView.addConstraints(withVisualFormat: "|[v]|", views: ["v": self.profileView])
             profileCell.contentView.addConstraints(withVisualFormat: "V:|[v]|", views: ["v": self.profileView])
             return profileCell
-        default:
-            return UITableViewCell(style: .subtitle, reuseIdentifier: "THIS_IS_A_PLACEHOLDER") // COME BACK TO THIS LATER
+        case .notes:
+            guard let note = user?.notes?.reversed[indexPath.row] as? Note else { preconditionFailure() }
+            let identifier = "note"
+            let noteCell = tableView.dequeueReusableCell(withIdentifier: identifier) as? ActivityTableViewCell ?? ActivityTableViewCell(reuseIdentifier: identifier)
+            noteCell.headerLabel.text = "You said"
+            noteCell.bodyLabel.text = note.body
+            noteCell.timestampLabel.text = (note.timestamp as Date?)?.timeAgoSinceNow
+            return noteCell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        guard let section = Section(rawValue: indexPath.section), section == .notes else { return nil }
+        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.destructive, title: "Delete") { (action, indexPath) in
+            guard let note = self.user?.notes?.reversed[indexPath.row] as? Note else { return }
+            self.user?.removeFromNotes(note)
+            UIApplication.shared.managedObjectContext.delete(note)
+            UIApplication.shared.saveAndReportErrors()
+            self.tableView.reloadData()
+        }
+        return [deleteAction]
     }
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard let section = Section(rawValue: indexPath.section) else { preconditionFailure() }
-        return section != .profile
+        return false
     }
 }
 
-extension ProfileViewController: UITextViewDelegate {
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        return true
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.showPlaceholderIfNeeded(for: textView, editingBegan: true)
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        self.showPlaceholderIfNeeded(for: textView, editingBegan: false)
-    }
-    
-    private func showPlaceholderIfNeeded(for textView: UITextView, editingBegan: Bool) {
-        if editingBegan {
-            guard textView.textColor == .lightGray else { return }
-            textView.text = nil
-            textView.textColor = .black
-        } else {
-            guard textView.text == nil else { return }
-            textView.text = self.notePlaceholder
-            textView.textColor = .lightGray
-        }
+// MARK: - AddNoteDelegate
+
+extension ProfileViewController: AddNoteDelegate {
+    func addNoteViewController(didAddNote note: String) {
+        let insertedNote = NSEntityDescription.insertNewObject(forEntityName: "Note", into: UIApplication.shared.managedObjectContext) as! Note
+        insertedNote.body = note
+        insertedNote.timestamp = NSDate()
+        user?.addToNotes(insertedNote)
+        UIApplication.shared.saveAndReportErrors()
+        self.tableView.reloadData()
     }
 }

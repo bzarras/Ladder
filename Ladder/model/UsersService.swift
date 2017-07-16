@@ -19,11 +19,11 @@ class UsersService {
     
     private init() {
         self.fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+        self.fetchRequest.predicate = NSPredicate(format: "id != 'self'", argumentArray: nil)
         self.fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastname", ascending: true), NSSortDescriptor(key: "firstname", ascending: true)]
         self.fetchedResultsController = NSFetchedResultsController(fetchRequest: self.fetchRequest, managedObjectContext: UIApplication.shared.managedObjectContext, sectionNameKeyPath: "firstCharOfLastName", cacheName: nil)
     }
     
-    // TODO: This may not be needed anymore because we handle everything through the fetchedResultsController
     func fetchAllUsers() -> [User] {
         if self.users.isEmpty {
             do {
@@ -37,12 +37,47 @@ class UsersService {
         return self.users
     }
     
+    func fetchUserIdentity() -> User {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+        fetchRequest.predicate = NSPredicate(format: "id == 'self'", argumentArray: nil)
+        do {
+            let identityUsers = try UIApplication.shared.managedObjectContext.fetch(fetchRequest) as? [User]
+            if let identityUsersArray = identityUsers, let identityUser = identityUsersArray.first {
+                return identityUser
+            } else {
+                let newIdentiyUser = self.createNewUser()
+                newIdentiyUser.firstname = "Your"
+                newIdentiyUser.lastname = "Name"
+                newIdentiyUser.id = "self"
+                UIApplication.shared.saveAndReportErrors()
+                return newIdentiyUser
+            }
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+    
     func createNewUser() -> User {
         let insertedUser = NSEntityDescription.insertNewObject(forEntityName: "User", into: UIApplication.shared.managedObjectContext) as! User
         return insertedUser
     }
     
     func save() {
+        if let newUsers = UIApplication.shared.managedObjectContext.insertedObjects as? Set<User> {
+            newUsers.forEach { newUser in
+                if newUser.id == nil {
+                    newUser.id = UUID().uuidString
+                }
+                let insertedActivity = NSEntityDescription.insertNewObject(forEntityName: "Activity", into: UIApplication.shared.managedObjectContext) as! Activity
+                insertedActivity.header = "New Contact"
+                insertedActivity.title = "\(newUser.firstname ?? "") \(newUser.lastname ?? "")"
+                if let company = newUser.company {
+                    insertedActivity.body = "\(company)"
+                }
+                insertedActivity.timestamp = NSDate()
+                insertedActivity.user = newUser
+            }
+        }
         UIApplication.shared.saveAndReportErrors()
         self.users = []
     }

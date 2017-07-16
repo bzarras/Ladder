@@ -25,7 +25,7 @@ class ContactsViewController: UIViewController {
         tableView.estimatedRowHeight = 100 // need this for the rows to initially size themselves correctly
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.separatorStyle = .none
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0) // 5 is to compensate for half-padding on top cell and bottom cell
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: CardTableViewCell.margin/2, right: 0) // 4 is to compensate for half-padding on top cell and bottom cell
         tableView.backgroundColor = .greyBackground
         tableView.sectionIndexColor = .mainApp
         tableView.sectionIndexBackgroundColor = .greyBackground
@@ -66,12 +66,14 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
         return self.showsEmptyState ? 1 : (UsersService.shared.fetchedResultsController.sections?.count ?? 0)
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if self.showsEmptyState {
-            return nil
-        }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if self.showsEmptyState { return nil }
         guard let section = UsersService.shared.fetchedResultsController.sections?[section] else { preconditionFailure() }
-        return section.name
+        return TableHeaderView(text: section.name)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return self.showsEmptyState ? 0 : TableHeaderView.font.lineHeight + ContactTableViewCell.margin
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
