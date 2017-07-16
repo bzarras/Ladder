@@ -10,10 +10,8 @@ import UIKit
 
 class ContactsViewController: UIViewController {
     
-    enum Section: Int {
-        case empty
-        case loaded
-        static var all = [empty, loaded]
+    fileprivate var showsEmptyState: Bool {
+        return (UsersService.shared.fetchedResultsController.sections?.count ?? 0) == 0
     }
     
     fileprivate var contacts: [User] {
@@ -27,8 +25,10 @@ class ContactsViewController: UIViewController {
         tableView.estimatedRowHeight = 100 // need this for the rows to initially size themselves correctly
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.separatorStyle = .none
-        tableView.contentInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0) // 5 is to compensate for half-padding on top cell and bottom cell
-        tableView.backgroundColor = UIColor.greyBackground
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: CardTableViewCell.margin/2, right: 0) // 4 is to compensate for half-padding on top cell and bottom cell
+        tableView.backgroundColor = .greyBackground
+        tableView.sectionIndexColor = .mainApp
+        tableView.sectionIndexBackgroundColor = .greyBackground
         tableView.showsVerticalScrollIndicator = false
         return tableView
     }()
@@ -63,34 +63,39 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         tableView.isScrollEnabled = !self.contacts.isEmpty // seems like a fine place to put this
-        return Section.all.count
+        return self.showsEmptyState ? 1 : (UsersService.shared.fetchedResultsController.sections?.count ?? 0)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if self.showsEmptyState { return nil }
+        guard let section = UsersService.shared.fetchedResultsController.sections?[section] else { preconditionFailure() }
+        return TableHeaderView(text: section.name)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return self.showsEmptyState ? 0 : TableHeaderView.font.lineHeight + ContactTableViewCell.margin
+    }
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return self.showsEmptyState ? nil : UsersService.shared.fetchedResultsController.sectionIndexTitles
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = Section(rawValue: section) else { preconditionFailure() }
-        switch section {
-        case .empty:
-            return self.contacts.isEmpty ? 1 : 0
-        case .loaded:
-            return self.contacts.count
+        if self.showsEmptyState {
+            return 1
         }
+        guard let section = UsersService.shared.fetchedResultsController.sections?[section] else { preconditionFailure() }
+        return section.numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let section = Section(rawValue: indexPath.section) else { preconditionFailure() }
-        switch section {
-        case .loaded:
-            let user = self.contacts[indexPath.row]
-            let profileVC = ProfileViewController(forUser: user)
-            self.navigationController?.pushViewController(profileVC, animated: true)
-        default:()
-        }
+        guard !self.showsEmptyState, let user = UsersService.shared.fetchedResultsController.object(at: indexPath) as? User else { return }
+        let profileVC = ProfileViewController(forUser: user)
+        self.navigationController?.pushViewController(profileVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = Section(rawValue: indexPath.section) else { preconditionFailure() }
-        switch section {
-        case .empty:
+        if self.showsEmptyState {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "empty")
             let arrowImageView = UIImageView(image: #imageLiteral(resourceName: "arrow-big"))
             let message = UILabel()
@@ -106,13 +111,13 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
                 NSLayoutConstraint(item: message, attribute: .top, relatedBy: .equal, toItem: arrowImageView, attribute: .bottom, multiplier: 1, constant: UIView.commonMargin),
                 NSLayoutConstraint(item: message, attribute: .centerX, relatedBy: .equal, toItem: cell.contentView, attribute: .centerX),
                 NSLayoutConstraint(item: message, attribute: .bottom, relatedBy: .equal, toItem: cell.contentView, attribute: .bottom)
-            ])
+                ])
             cell.backgroundColor = .greyBackground
             return cell
-        case .loaded:
+        } else {
+            guard let contact = UsersService.shared.fetchedResultsController.object(at: indexPath) as? User else { preconditionFailure() }
             let reuseId = "contactCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: reuseId) as? ContactTableViewCell ?? ContactTableViewCell(reuseIdentifier: reuseId)
-            let contact = self.contacts[indexPath.row]
             cell.nameLabel.text = "\(contact.firstname ?? "") \(contact.lastname ?? "")"
             cell.companyLabel.text = contact.company
             cell.jobTitleLabel.text = contact.title
@@ -121,13 +126,12 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard let section = Section(rawValue: indexPath.section) else { preconditionFailure() }
-        return section == .loaded
+        return !self.showsEmptyState
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.destructive, title: "Delete") { (action, indexPath) in
-            let user = self.contacts[indexPath.row]
+            guard let user = UsersService.shared.fetchedResultsController.object(at: indexPath) as? User else { return }
             UsersService.shared.delete(user: user)
             self.tableView.reloadData()
         }
@@ -135,7 +139,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard let section = Section(rawValue: indexPath.section) else { preconditionFailure() }
-        return section == .loaded
+        return !self.showsEmptyState
     }
 }
