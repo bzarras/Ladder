@@ -17,11 +17,11 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         self.tabBar.tintColor = UIColor.mainApp
+        let contactsNavController = UINavigationController(rootViewController: self.contactsViewController)
         let activityNavController = UINavigationController(rootViewController: self.activityViewController)
         let updatesNavController = UINavigationController(rootViewController: self.updatesViewController)
         let profileNavController = UINavigationController(rootViewController: self.profileViewController)
-        let contactsNavController = UINavigationController(rootViewController: self.contactsViewController)
-        let navControllers = [activityNavController, updatesNavController, contactsNavController, profileNavController]
+        let navControllers = [contactsNavController, activityNavController, updatesNavController, profileNavController]
         navControllers.forEach {
             $0.navigationBar.barStyle = .default
             $0.navigationBar.isTranslucent = false

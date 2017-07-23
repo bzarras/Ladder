@@ -11,7 +11,7 @@ import UIKit
 class ContactTableViewCell: CardTableViewCell {
     
     lazy var avatar: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "avatar"))
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "avatar-solid"))
         return imageView
     }()
     
