@@ -36,7 +36,7 @@ class ActivityViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.title = "Activity"
         self.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo-green"))
-        self.tabBarItem = UITabBarItem(title: self.title, image: #imageLiteral(resourceName: "home"), tag: 0)
+        self.tabBarItem = UITabBarItem(title: self.title, image: #imageLiteral(resourceName: "activity"), tag: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {
