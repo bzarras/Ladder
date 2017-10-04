@@ -108,7 +108,7 @@ class ProfileViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "Add Note", style: .default, handler: { [weak self] action in
             self?.didTapAddNote()
         }))
-        alertController.addAction(UIAlertAction(title: "Add Meeting", style: .default, handler: { action in
+        alertController.addAction(UIAlertAction(title: "Add Meeting", style: .default, handler: { [weak self] action in
             self?.didTapAddMeeting()
         }))
         alertController.addAction(UIAlertAction(title: "Edit Contact", style: .default, handler: { [weak self] action in
