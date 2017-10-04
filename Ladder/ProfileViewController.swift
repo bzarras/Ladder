@@ -11,11 +11,15 @@ import CoreData
 import DateToolsSwift
 
 class ProfileViewController: UIViewController {
-    
     fileprivate enum Section: Int {
         case profile
-        case notes
-        static let all = [profile, notes]
+        case buttons
+        case userData
+        static let all = [profile, buttons, userData]
+    }
+    
+    private enum UserDataType: Int {
+        case notes, meetings
     }
     
     fileprivate let notePlaceholder = "Add note"
@@ -25,9 +29,24 @@ class ProfileViewController: UIViewController {
     var userIsSelf: Bool {
         return self.user?.id == "self"
     }
+    private var currentRowType: UserDataType = .notes {
+        didSet {
+            self.tableView.reloadSections(IndexSet(integer: Section.userData.rawValue), with: .fade)
+        }
+    }
     
     lazy var profileView: ProfileView = {
         return ProfileView(frame: .zero)
+    }()
+    
+    lazy var notesToggle: UISegmentedControl = {
+        let control = UISegmentedControl()
+        control.insertSegment(withTitle: "Notes", at: 0, animated: false)
+        control.insertSegment(withTitle: "Meetings", at: 1, animated: false)
+        control.selectedSegmentIndex = 0
+        control.tintColor = .mainApp
+        control.addTarget(self, action: #selector(didToggleNotesOrMeetings), for: .valueChanged)
+        return control
     }()
     
     lazy var tableView: UITableView = {
@@ -39,14 +58,6 @@ class ProfileViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.backgroundColor = .greyBackground
         return tableView
-    }()
-    
-    lazy var addNoteButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Add Note", for: .normal)
-        button.setTitleColor(UIColor.mainApp, for: .normal)
-        button.addTarget(self, action: #selector(didTapAddNote), for: .touchUpInside)
-        return button
     }()
     
     required init(forUser user: User?) {
@@ -73,16 +84,14 @@ class ProfileViewController: UIViewController {
         } else {
             self.navigationItem.title = "Contact"
         }
-        let rightItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(self.didTapEdit))
+        let rightItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(self.didTapAdd))
         rightItem.tintColor = .mainApp
         self.navigationItem.setRightBarButton(rightItem, animated: true)
         
         self.view.backgroundColor = .greyBackground
-        self.view.addSubviews([self.tableView, self.addNoteButton])
-        self.view.addConstraints(withVisualFormat: "V:|[table][button][bottom]", views: ["table": self.tableView, "button": self.addNoteButton, "bottom": self.bottomLayoutGuide])
+        self.view.addSubviews([self.tableView])
+        self.view.addConstraints(withVisualFormat: "V:|[table][bottom]", views: ["table": self.tableView, "bottom": self.bottomLayoutGuide])
         self.view.addConstraints(withVisualFormat: "|[table]|", views: ["table": self.tableView])
-        self.view.addConstraint(NSLayoutConstraint(item: self.addNoteButton, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX))
-        self.addNoteButton.isHidden = self.userIsSelf
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,6 +103,22 @@ class ProfileViewController: UIViewController {
     
     // MARK: - Actions
     
+    @objc func didTapAdd() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Add Note", style: .default, handler: { [weak self] action in
+            self?.didTapAddNote()
+        }))
+        alertController.addAction(UIAlertAction(title: "Add Meeting", style: .default, handler: { action in
+            self?.didTapAddMeeting()
+        }))
+        alertController.addAction(UIAlertAction(title: "Edit Contact", style: .default, handler: { [weak self] action in
+            self?.didTapEdit()
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.view.tintColor = .mainApp
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     func didTapEdit() {
         let vc = AddContactViewController(user: self.user)
         self.navigationController?.pushViewController(vc, animated: true)
@@ -103,6 +128,14 @@ class ProfileViewController: UIViewController {
         let vc = AddNoteViewController()
         vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func didTapAddMeeting() {
+        // TODO: Implement this
+    }
+    
+    @objc func didToggleNotesOrMeetings(segmentedControl: UISegmentedControl) {
+        self.currentRowType = UserDataType(rawValue: segmentedControl.selectedSegmentIndex) ?? .notes
     }
 }
 
@@ -119,8 +152,15 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         switch section {
         case .profile:
             return 1
-        case .notes:
-            return user?.notes?.count ?? 0
+        case .buttons:
+            return 1
+        case .userData:
+            switch self.currentRowType {
+            case .notes:
+                return self.user?.notes?.count ?? 0
+            case .meetings:
+                return self.user?.meetings?.count ?? 0
+            }
         }
     }
     
@@ -128,8 +168,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         guard let section = Section(rawValue: section) else { preconditionFailure() }
         switch section {
         case .profile: return nil
-        case .notes:
-            return self.userIsSelf ? nil : TableHeaderView(text: "Notes")
+        case .buttons: return nil
+        case .userData:
+            return self.userIsSelf ? nil : TableHeaderView(text: self.currentRowType == .notes ? "Notes" : "Meetings")
         }
     }
     
@@ -137,7 +178,8 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         guard let section = Section(rawValue: section) else { preconditionFailure() }
         switch section {
         case .profile: return 0
-        case .notes:
+        case .buttons: return 0
+        case .userData:
             return self.userIsSelf ? 0 : TableHeaderView.font.lineHeight + CardTableViewCell.margin
         }
     }
@@ -152,27 +194,48 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             profileCell.contentView.addConstraints(withVisualFormat: "|[v]|", views: ["v": self.profileView])
             profileCell.contentView.addConstraints(withVisualFormat: "V:|[v]|", views: ["v": self.profileView])
             return profileCell
-        case .notes:
-            guard let note = user?.notes?.reversed[indexPath.row] as? Note else { preconditionFailure() }
-            let identifier = "note"
-            let noteCell = tableView.dequeueReusableCell(withIdentifier: identifier) as? ActivityTableViewCell ?? ActivityTableViewCell(reuseIdentifier: identifier)
-            noteCell.headerLabel.text = "You said"
-            noteCell.bodyLabel.text = note.body
-            noteCell.timestampLabel.text = (note.timestamp as Date?)?.timeAgoSinceNow
-            return noteCell
+        case .buttons:
+            let identifier = "buttons"
+            let buttonCell = tableView.dequeueReusableCell(withIdentifier: identifier) ?? UITableViewCell(style: .subtitle, reuseIdentifier: identifier)
+            buttonCell.contentView.addSubviews([self.notesToggle])
+            buttonCell.contentView.addConstraints(withVisualFormat: "|-[control]-|", views: ["control": self.notesToggle])
+            buttonCell.contentView.addConstraints(withVisualFormat: "V:|-[control]-|", views: ["control": self.notesToggle])
+            buttonCell.backgroundColor = .greyBackground
+            return buttonCell
+        case .userData:
+            switch self.currentRowType {
+            case .notes:
+                guard let note = self.user?.notes?.reversed[indexPath.row] as? Note else { preconditionFailure() }
+                let identifier = "note"
+                let noteCell = tableView.dequeueReusableCell(withIdentifier: identifier) as? ActivityTableViewCell ?? ActivityTableViewCell(reuseIdentifier: identifier)
+                noteCell.headerLabel.text = "You said"
+                noteCell.bodyLabel.text = note.body
+                noteCell.timestampLabel.text = (note.timestamp as Date?)?.timeAgoSinceNow
+                return noteCell
+            case .meetings:
+                // TODO: build a cell here for meetings
+                return ActivityTableViewCell(reuseIdentifier: "meetings")
+            }
+            
         }
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        guard let section = Section(rawValue: indexPath.section), section == .notes else { return nil }
-        let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.destructive, title: "Delete") { (action, indexPath) in
-            guard let note = self.user?.notes?.reversed[indexPath.row] as? Note else { return }
-            self.user?.removeFromNotes(note)
-            UIApplication.shared.managedObjectContext.delete(note)
-            UIApplication.shared.saveAndReportErrors()
-            self.tableView.reloadData()
+        guard let section = Section(rawValue: indexPath.section), section == .userData else { return nil }
+        switch self.currentRowType {
+        case .notes:
+            let deleteAction = UITableViewRowAction(style: UITableViewRowActionStyle.destructive, title: "Delete") { (action, indexPath) in
+                guard let note = self.user?.notes?.reversed[indexPath.row] as? Note else { return }
+                self.user?.removeFromNotes(note)
+                UIApplication.shared.managedObjectContext.delete(note)
+                UIApplication.shared.saveAndReportErrors()
+                self.tableView.reloadData()
+            }
+            return [deleteAction]
+        default:
+            return nil
         }
-        return [deleteAction]
+        
     }
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
@@ -186,8 +249,8 @@ extension ProfileViewController: AddNoteDelegate {
     func addNoteViewController(didAddNote note: String) {
         let insertedNote = NSEntityDescription.insertNewObject(forEntityName: "Note", into: UIApplication.shared.managedObjectContext) as! Note
         insertedNote.body = note
-        insertedNote.timestamp = NSDate()
-        user?.addToNotes(insertedNote)
+        insertedNote.timestamp = Date()
+        self.user?.addToNotes(insertedNote)
         UIApplication.shared.saveAndReportErrors()
         self.tableView.reloadData()
     }

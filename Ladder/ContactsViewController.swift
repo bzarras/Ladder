@@ -54,7 +54,7 @@ class ContactsViewController: UIViewController {
     
     // MARK: - Actions
     
-    func didTapAddContact() {
+    @objc func didTapAddContact() {
         self.navigationController?.pushViewController(AddContactViewController(), animated: true)
     }
 }

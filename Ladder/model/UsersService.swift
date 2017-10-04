@@ -74,7 +74,7 @@ class UsersService {
                 if let company = newUser.company {
                     insertedActivity.body = "\(company)"
                 }
-                insertedActivity.timestamp = NSDate()
+                insertedActivity.timestamp = Date()
                 insertedActivity.user = newUser
             }
         }
@@ -93,7 +93,7 @@ class UsersService {
 }
 
 fileprivate extension User {
-    dynamic var firstCharOfLastName: String? {
+    @objc dynamic var firstCharOfLastName: String? {
         let firstChar = self.lastname?.characters.first
         guard let c = firstChar else { return nil }
         return String(c)

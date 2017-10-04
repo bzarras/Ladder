@@ -48,7 +48,7 @@ class AddNoteViewController: UIViewController {
     
     // MARK: - Private
     
-    func didTapDone() {
+    @objc func didTapDone() {
         let resigned = self.textView.resignFirstResponder()
         guard resigned else { return }
         self.navigationController?.popViewController(animated: true)

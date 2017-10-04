@@ -112,7 +112,7 @@ class AddContactViewController: UIViewController {
     
     // MARK: - Actions
     
-    func didTapDone() {
+    @objc func didTapDone() {
         let firstResponder = self.stackView.arrangedSubviews.filter { return $0.isFirstResponder }.first
         if let textField = firstResponder as? UITextField {
             let _ = self.textFieldShouldReturn(textField)
@@ -127,7 +127,7 @@ class AddContactViewController: UIViewController {
         let _ = self.navigationController?.popViewController(animated: true)
     }
     
-    func didTapCancel() {
+    @objc func didTapCancel() {
         UsersService.shared.rollback()
         let _ = self.navigationController?.popViewController(animated: true)
     }
