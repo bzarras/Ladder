@@ -23,6 +23,19 @@ extension UIView {
         self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: vfl, options: [], metrics: nil, views: views))
     }
     
+    func make(subviews: [UIView], flushAlongAxes axes: [UILayoutConstraintAxis], withPadding: Int = 0) {
+        for subview in subviews {
+            for axis in axes {
+                switch axis {
+                case .vertical:
+                    self.addConstraints(withVisualFormat: "V:|-padding-[sub]-padding-|", views: ["sub": subview])
+                case .horizontal:
+                    self.addConstraints(withVisualFormat: "|-padding-[sub]-padding-|", views: ["sub": subview])
+                }
+            }
+        }
+    }
+    
 }
 
 extension NSLayoutConstraint {
